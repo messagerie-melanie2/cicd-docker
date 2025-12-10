@@ -1,0 +1,32 @@
+copy_files:
+  tmp_manage_runners.py:
+    source: /usr/local/etc/template.d/gitlabrunner/manage_runners.py
+    dest: /tmp/manage_runners.py
+    when: before_sed
+  manage_runners.py:
+    source: /tmp/manage_runners.py
+    dest: /manage_runners.py
+    perms: 0o744
+    when: after_sed
+variables:
+  # manage_runners.py
+  GITLAB_TOKEN:
+    type: secret
+    secret_path: /run/secrets/gitlab-runner-token-v1.1
+    default_value: ''
+    add_to_replace_paterns: /tmp/manage_runners.py
+    fail_if_empty: True
+  PROXY_USERNAME:
+    type: secret
+    secret_path: /run/secrets/proxy_tiger_backend_username-v1.0
+    default_value: ''
+    help: 'Http proxy username'
+    add_to_replace_paterns: /tmp/manage_runners.py
+    fail_if_empty: False
+  PROXY_PASSWORD:
+    type: secret
+    secret_path: /run/secrets/proxy_tiger_backend_password-v1.0
+    default_value: ''
+    help: 'Http proxy password'
+    add_to_replace_paterns: /tmp/manage_runners.py
+    fail_if_empty: False

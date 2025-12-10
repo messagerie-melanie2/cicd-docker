@@ -1,0 +1,5 @@
+parent_version: 
+  - version_name: "v1.19.2-debug"
+    version_number:  
+no_build: False
+no_repo: True

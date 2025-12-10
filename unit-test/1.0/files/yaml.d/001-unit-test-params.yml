@@ -1,0 +1,19 @@
+make_dirs:
+  /usr/local/entrypoint/script:
+variables:
+  #Command line var
+  NUM_PROCESS:
+    type: env
+    default_value: '1'
+    help: 'Number of process launched by pytest'
+    fail_if_empty: True
+  ENTRYPOINT_NAME:
+    type: env
+    default_value: 'entrypoint'
+    help: 'entrypoint name'
+    fail_if_empty: True
+
+cmdline: [ 'pytest', '--numprocesses', '${NUM_PROCESS}','/usr/local/entrypoint/script/${ENTRYPOINT_NAME}.py']
+cmdline_replace_vars: True
+
+  

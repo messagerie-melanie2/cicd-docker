@@ -1,0 +1,1 @@
+cmdline: [ 'python3', '/usr/local/swarm_clusters/entrypoint.py', '--debug-enabled']

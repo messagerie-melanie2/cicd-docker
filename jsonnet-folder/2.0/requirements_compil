@@ -1,0 +1,4 @@
+build-essential
+apt-utils
+pkg-config
+git

@@ -1,0 +1,21 @@
+parent_version: 
+  - version_name: v17.11.3
+    version_number:  
+no_build: False
+no_repo: False
+variables:
+  - name: "registry"
+    type: env
+    default: "REGISTRY_DOMAIN"
+  - name: "gitlab_domain"
+    type: env
+    default: "GITLAB_DOMAIN"
+  - name: "docker_tools_path"
+    type: env
+    default: "DOCKER_TOOLS_PATH"
+  - name: "cicd_unit_test_path"
+    type: env
+    default: "CICD_UNIT_TEST_PATH"
+  - name: "registry_git_image_path"
+    type: env
+    default: "REGISTRY_GIT_IMAGE_PATH"

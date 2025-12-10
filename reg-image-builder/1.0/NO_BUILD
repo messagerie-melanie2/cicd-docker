@@ -1,0 +1,4 @@
+###
+# This file prevents this image/version from being (re)built
+# Any existing matching image/version will also be cleaned
+###

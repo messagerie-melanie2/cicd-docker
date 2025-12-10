@@ -1,0 +1,5 @@
+#
+# This file contains a list of Debian dependencies 
+# that are used during the build of the associated Dockerfile
+# 
+git
