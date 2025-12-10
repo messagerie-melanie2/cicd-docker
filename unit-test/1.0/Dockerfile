@@ -1,4 +1,4 @@
-# Get image registry provided by the build command
+# Get image registry provided by the build command 
 # i.e. 'docker build --build-arg registry={...} .'
 ARG registry
 
