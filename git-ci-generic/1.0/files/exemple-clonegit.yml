@@ -1,0 +1,8 @@
+branchs_mapping:
+    prod: 'main'
+    preprod: 'test'
+    lab: 'lab'
+    dev: 'jc-dev'
+default_branch: 'lab'
+fallback_to_default_branch: False
+clone_dir: '/source'

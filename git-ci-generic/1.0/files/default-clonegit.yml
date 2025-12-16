@@ -1,0 +1,6 @@
+branchs_mapping:
+    prod: 'prod'
+    preprod: 'preprod'
+default_branch: 'preprod'
+fallback_to_default_branch: True
+clone_dir: '/source'
