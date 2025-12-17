@@ -1,7 +1,7 @@
 parent_version: 
   - version_name: 2.6
     version_number:  
-no_build: True
+no_build: False
 no_repo: False
 variables:
   - name: "cicd_gmcd_token"
@@ -22,6 +22,12 @@ variables:
   - name: "registry_git_image_path"
     type: env
     default: "REGISTRY_GIT_IMAGE_PATH"
+  - name: "git_image_name"
+    type: env
+    default: "GIT_IMAGE_NAME"
+  - name: "git_image_tag"
+    type: env
+    default: "GIT_IMAGE_TAG"
   - name: "gitlab_domain"
     type: env
     default: "GITLAB_DOMAIN"
