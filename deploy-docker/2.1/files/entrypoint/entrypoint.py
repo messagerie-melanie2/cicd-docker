@@ -22,6 +22,7 @@ JENKINS_URL=env.json('PIPELINES_NAMES',JENKINS_URL_DEFAULT)
 DOCKER_COMPOSE_TYPE=env.list('DOCKER_COMPOSE_TYPE',DOCKER_COMPOSE_TYPE_DEFAULT)
 REGISTRY_PATHS=env.list('REGISTRY_PATHS',REGISTRY_PATHS_DEFAULT)
 PIPELINES_NAMES_LIST=env.list('PIPELINES_NAMES_LIST',PIPELINES_NAMES_LIST_DEFAULT)
+SETUP_BUILD_DEPLOY_TOKEN_VARIABLE_NAME = os.environ.get('SETUP_BUILD_DEPLOY_TOKEN_VARIABLE_NAME','')
 PIPELINES_NAMES = {}
 for i in range(len(PIPELINES_NAMES_LIST)) :
     PIPELINES_NAMES[DOCKER_COMPOSE_TYPE[i]] = PIPELINES_NAMES_LIST[i]
@@ -144,7 +145,7 @@ def get_image_info(registry):
 
 def trigger_jenkins(cluster_by_registry) :
     jenkins_url = os.environ["JENKINS_URL"]
-    jenkins_token = os.environ["JENKINS_TOKEN"]
+    jenkins_token = os.environ[SETUP_BUILD_DEPLOY_TOKEN_VARIABLE_NAME]
     headers = {"token": jenkins_token}
 
     url = JENKINS_URL[jenkins_url]
