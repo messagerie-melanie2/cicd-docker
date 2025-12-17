@@ -23,9 +23,11 @@ ARG parent_version_default=2.6
 ARG image_version_replace=true
 
 ARG registry_git_image_path
+ARG git_image_name
+ARG git_image_tag
 # Docker Multistage : récupération de l'entrypoint
 ###############################################################################
-FROM ${registry}${registry_git_image_path}/git-mce-generic:bookworm-slim_1.0 AS pullentrypoint
+FROM ${registry}${registry_git_image_path}/${git_image_name}:${git_image_tag} AS pullentrypoint
 ARG build_branch
 ARG ci_job_token
 ARG docker_tools_path

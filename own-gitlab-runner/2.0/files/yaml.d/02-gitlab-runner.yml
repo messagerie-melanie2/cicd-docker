@@ -12,20 +12,20 @@ variables:
   # manage_runners.py
   GITLAB_TOKEN:
     type: secret
-    secret_path: /run/secrets/gitlab-runner-token-v1.1
+    secret_path: /run/secrets/gitlab-runner-token
     default_value: ''
     add_to_replace_paterns: /tmp/manage_runners.py
     fail_if_empty: True
   PROXY_USERNAME:
     type: secret
-    secret_path: /run/secrets/proxy_tiger_backend_username-v1.0
+    secret_path: /run/secrets/proxy_username
     default_value: ''
     help: 'Http proxy username'
     add_to_replace_paterns: /tmp/manage_runners.py
     fail_if_empty: False
   PROXY_PASSWORD:
     type: secret
-    secret_path: /run/secrets/proxy_tiger_backend_password-v1.0
+    secret_path: /run/secrets/proxy_password
     default_value: ''
     help: 'Http proxy password'
     add_to_replace_paterns: /tmp/manage_runners.py
