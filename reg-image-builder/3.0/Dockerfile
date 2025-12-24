@@ -1,4 +1,4 @@
-# Get image registry provided by the build command 
+# Get image registry provided by the build command
 # i.e. 'docker build --build-arg registry={...} .'
 ARG registry
 ARG registry_default=registry.gitlab-forge.din.developpement-durable.gouv.fr/snum/detn/gmcd/cicd-docker
@@ -12,17 +12,17 @@ ARG registry_default=registry.gitlab-forge.din.developpement-durable.gouv.fr/snu
 
 ARG parent_version
 ARG parent_version_default=v1.19.2-debug
-ARG parent_version_replace_with=3.0
+ARG parent_version_replace_with=2.0
 
 # Version of the Docker image built with this Dockerfile
-# Used to build full version string : {parent_version}_{image_version} 
-#
+# Used to build full version string : {parent_version}_{image_version}
+# 
 # image_version - version provided by the build command ('docker build --build-arg image_version={...} .')
 # image_version_default - fallback value if no image_version was found, also used by the python script (for CI/CD)
 # image_version_replace - if true, image_version will replace the image_version contained in parent_version in the tag of the docker image
 #
 ARG image_version
-ARG image_version_default=3.0
+ARG image_version_default=2.0
 ARG image_version_replace=false
 
 #################
@@ -55,14 +55,12 @@ RUN curl -LO https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 
     
 # ENTRYPOINT /bin/bash
 
-#################
+################# 
 # TARGET IMAGE
 #################
 
-# Use Kaniko source image
-# FROM gcr.io/kaniko-project/executor:v1.9.1-debug as kaniko
-FROM ${registry:-${registry_default}}/kaniko-executor:${parent_version:-${parent_version_default}}
-
+FROM debian:${parent_version:-${parent_version_default}}
+#
 # Add image information
 LABEL \
     category="tools" \
@@ -70,66 +68,37 @@ LABEL \
     target="build" \
     maintainers="TOLIMAT Hamza"
 
-# Copy binaries and files (including /etc/bash/.bashrc)
-#
-# bash
-COPY --from=tools /bin/bash /bin/bash
-COPY --from=tools /etc/bash /etc/bash
-#
-############################################################
-############################################################
-# 'Kaniko Builder' paths definition
-#
-# Kaniko directory (Kaniko Path)
-ENV KP=/kaniko
-ENV KPT=/kaniko-tmp
-#
-# Base directory (Kaniko Builder Path)
-ENV KBP=$KP/builder
-ENV KBPT=$KPT/builder
-#
-# Binaries directory (Kaniko Builder Binary)
-ENV KBB=$KBP/bin
-ENV KBBT=$KBPT/bin
-#
-# Entrypoint directory (Kaniko Builder Entrypoint)
-ENV KBE=/entrypoint/entrypoint.sh
-############################################################
-############################################################
-# 'Kaniko Builder' required tools
-#
-# Create directories
-RUN mkdir -p $KPT
-RUN cp $KP/docker-credential-acr-env $KPT/docker-credential-acr-env && cp $KP/docker-credential-ecr-login $KPT/docker-credential-ecr-login && cp $KP/docker-credential-gcr $KPT/docker-credential-gcr && cp $KP/executor $KPT/executor && cp $KP/warmer $KPT/warmer
-RUN cp -r $KP/ssl $KPT/ssl
+# Set non interactive frontend for debian apt
+ENV DEBIAN_FRONTEND=noninteractive
 
-RUN mkdir -p $KBBT
+COPY requirements_deb .
+RUN apt-get update && \
+    apt-get -y upgrade && \
+    apt-get install -y --no-install-recommends  $(sed -e '/^#/d' requirements_deb) && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+#
+# jq
+# COPY --from=tools /usr/bin/jq /bin/jq
+
+# Copy required libs related to these binaries
 #
 # shared
 COPY --from=tools /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
-# bash (`ldd /bin/bash`)
 COPY --from=tools /usr/lib/libreadline.so.8 /usr/lib/libreadline.so.8
 COPY --from=tools /usr/lib/libncursesw.so.6 /usr/lib/libncursesw.so.6
-#
-# Copy other tools in that directory (container-diff, crane, jq, bash)
-COPY --from=tools /usr/local/bin/* $KBBT/
-#
-RUN ls -liah /bin 
-# Update PATH to find tools
-ENV PATH="$PATH:/bin:$KBB"
+############################################################
+############################################################
+# Builder required tools
 
+# Copy bash in that directory
+COPY --from=tools /usr/local/bin/* /usr/local/bin/
+#
 ############################################################
 ############################################################
-# 'Kaniko Builder' entrypoint and command(s)
+# Builder entrypoint and command(s)
 #
-# Copy entrypoint script
-COPY --chown=0:0 files/entrypoint.sh $KBE
-RUN chmod 755 $KBE
-#
-# Run the script on container startup
-CMD ["exec $KBE"]
-#
+
 # Execute the given command (above, or override) using bash
 ENTRYPOINT ["/bin/bash", "-c"]
-############################################################
-############################################################ 
