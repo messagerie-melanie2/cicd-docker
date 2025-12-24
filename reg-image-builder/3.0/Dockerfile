@@ -68,9 +68,11 @@ LABEL \
     target="build" \
     maintainers="TOLIMAT Hamza"
 
+# Copy binaries and files (including /etc/bash/.bashrc)
 #
-# jq
-# COPY --from=tools /usr/bin/jq /bin/jq
+# bash
+COPY --from=tools /bin/bash /bin/bash
+COPY --from=tools /etc/bash /etc/bash
 
 # Copy required libs related to these binaries
 #
@@ -90,5 +92,6 @@ COPY --from=tools /usr/local/bin/* /usr/local/bin/
 # Builder entrypoint and command(s)
 #
 
+ENV BUILDKITD_FLAGS="--oci-worker-no-process-sandbox"
 # Execute the given command (above, or override) using bash
 ENTRYPOINT ["/bin/bash", "-c"]
