@@ -11,8 +11,8 @@ ARG registry_default=registry.gitlab-forge.din.developpement-durable.gouv.fr/snu
 # parent_version_replace_with - string that will replace the parent_version in the tag of the docker image
 
 ARG parent_version
-ARG parent_version_default=v1.19.2-debug
-ARG parent_version_replace_with=2.0
+ARG parent_version_default=trixie-slim
+ARG parent_version_replace_with=3.0
 
 # Version of the Docker image built with this Dockerfile
 # Used to build full version string : {parent_version}_{image_version}
@@ -22,7 +22,7 @@ ARG parent_version_replace_with=2.0
 # image_version_replace - if true, image_version will replace the image_version contained in parent_version in the tag of the docker image
 #
 ARG image_version
-ARG image_version_default=2.0
+ARG image_version_default=3.0
 ARG image_version_replace=false
 
 #################
