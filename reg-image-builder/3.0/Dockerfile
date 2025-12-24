@@ -93,5 +93,3 @@ COPY --from=tools /usr/local/bin/* /usr/local/bin/
 #
 
 ENV BUILDKITD_FLAGS="--oci-worker-no-process-sandbox"
-# Execute the given command (above, or override) using bash
-ENTRYPOINT ["/bin/bash", "-c"]
