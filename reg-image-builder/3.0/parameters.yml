@@ -1,5 +1,5 @@
 parent_version:
-- version_name: 'trixie-slim'
+- version_name: 'rootless'
   version_number:
 no_build: False
 no_repo: False

@@ -11,7 +11,7 @@ ARG registry_default=registry.gitlab-forge.din.developpement-durable.gouv.fr/snu
 # parent_version_replace_with - string that will replace the parent_version in the tag of the docker image
 
 ARG parent_version
-ARG parent_version_default=trixie-slim
+ARG parent_version_default=rootless
 ARG parent_version_replace_with=3.0
 
 # Version of the Docker image built with this Dockerfile
@@ -59,7 +59,7 @@ RUN curl -LO https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 
 # TARGET IMAGE
 #################
 
-FROM debian:${parent_version:-${parent_version_default}}
+FROM moby/buildkit:${parent_version:-${parent_version_default}}
 #
 # Add image information
 LABEL \
@@ -67,16 +67,6 @@ LABEL \
     scope="cicd" \
     target="build" \
     maintainers="TOLIMAT Hamza"
-
-# Set non interactive frontend for debian apt
-ENV DEBIAN_FRONTEND=noninteractive
-
-COPY requirements_deb .
-RUN apt-get update && \
-    apt-get -y upgrade && \
-    apt-get install -y --no-install-recommends  $(sed -e '/^#/d' requirements_deb) && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
 
 #
 # jq
@@ -99,9 +89,6 @@ COPY --from=tools /usr/local/bin/* /usr/local/bin/
 ############################################################
 # Builder entrypoint and command(s)
 #
-
-ENV BUILDAH_ISOLATION=chroot
-ENV STORAGE_DRIVER=vfs
 
 # Execute the given command (above, or override) using bash
 ENTRYPOINT ["/bin/bash", "-c"]
