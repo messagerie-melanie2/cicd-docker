@@ -71,15 +71,15 @@ LABEL \
 # Copy binaries and files (including /etc/bash/.bashrc)
 #
 # bash
-COPY --from=tools /bin/bash /bin/bash
-COPY --from=tools /etc/bash /etc/bash
+# COPY --from=tools /bin/bash /bin/bash
+# COPY --from=tools /etc/bash /etc/bash
 
 # Copy required libs related to these binaries
 #
 # shared
-COPY --from=tools /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
-COPY --from=tools /usr/lib/libreadline.so.8 /usr/lib/libreadline.so.8
-COPY --from=tools /usr/lib/libncursesw.so.6 /usr/lib/libncursesw.so.6
+# COPY --from=tools /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
+# COPY --from=tools /usr/lib/libreadline.so.8 /usr/lib/libreadline.so.8
+# COPY --from=tools /usr/lib/libncursesw.so.6 /usr/lib/libncursesw.so.6
 ############################################################
 ############################################################
 # Builder required tools
