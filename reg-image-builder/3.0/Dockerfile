@@ -100,5 +100,8 @@ COPY --from=tools /usr/local/bin/* /usr/local/bin/
 # Builder entrypoint and command(s)
 #
 
+ENV BUILDAH_ISOLATION=chroot
+ENV STORAGE_DRIVER=vfs
+
 # Execute the given command (above, or override) using bash
 ENTRYPOINT ["/bin/bash", "-c"]
