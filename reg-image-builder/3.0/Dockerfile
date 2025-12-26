@@ -70,6 +70,8 @@ LABEL \
 
 # Copy binaries and files (including /etc/bash/.bashrc)
 #
+USER root
+
 #bash
 COPY --from=tools /bin/bash /bin/bash
 COPY --from=tools /etc/bash /etc/bash
@@ -91,6 +93,8 @@ COPY --from=tools /usr/local/bin/* /usr/local/bin/
 ############################################################
 # Builder entrypoint and command(s)
 #
+USER 1000
+
 COPY --chmod=755 files/entrypoint.sh /builder/entrypoint.sh
 #
 # Run the script on container startup
