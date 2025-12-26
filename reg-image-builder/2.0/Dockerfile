@@ -84,8 +84,7 @@ COPY --from=tools /etc/bash /etc/bash
 # shared
 COPY --from=tools /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
 # bash (`ldd /bin/bash`)
-COPY --from=tools /usr/lib/libreadline.so.8 /usr/lib/libreadline.so.8
-COPY --from=tools /usr/lib/libncursesw.so.6 /usr/lib/libncursesw.so.6
+COPY --from=tools /usr/lib/* /usr/lib/
 
 RUN ls -liah /usr/lib
 # # jq (`ldd /usr/bin/jq`)
