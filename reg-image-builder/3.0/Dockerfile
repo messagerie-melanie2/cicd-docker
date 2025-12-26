@@ -94,4 +94,4 @@ COPY --from=tools /usr/local/bin/* /usr/local/bin/
 
 ENV BUILDKITD_FLAGS="--oci-worker-no-process-sandbox"
 
-RUN cat /etc/sysctl.conf
+RUN echo "kernel.apparmor_restrict_unprivileged_userns=0" >> /etc/sysctl.conf
