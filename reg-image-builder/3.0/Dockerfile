@@ -96,5 +96,5 @@ COPY --chmod=755 files/entrypoint.sh /builder/entrypoint.sh
 # Run the script on container startup
 CMD ["exec /builder/entrypoint.sh"]
 #
-# Execute the given command (above, or override) using bash
+# Execute the given command (above, or override) using bash 
 ENTRYPOINT ["/bin/bash", "-c"]
