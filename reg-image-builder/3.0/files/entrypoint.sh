@@ -209,7 +209,7 @@ main()
 
             # Build image and push it immediately
             local output="type=image,name=$TAG,push=$ALLOWED_PUSH"
-            build_image
+            build_image $output
         fi
     else
         # Display an informational message
