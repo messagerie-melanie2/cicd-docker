@@ -1,5 +1,5 @@
 parent_version:
-- version_name: 'rootless'
+- version_name: 'latest'
   version_number:
 no_build: False
 no_repo: False
