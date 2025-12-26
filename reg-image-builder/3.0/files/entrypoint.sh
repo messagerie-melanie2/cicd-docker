@@ -28,6 +28,7 @@ readonly DOCKER_PROXY_BUILD_ARGS=${DOCKER_PROXY_BUILD_ARGS}
 readonly DOCKER_BUILD_ARGS=${DOCKER_BUILD_ARGS}
 #
 readonly TAG=${TAG}
+readonly ALLOWED_PUSH=${ALLOWED_PUSH}
 readonly BUILD_PWD=${BUILD_PWD}
 readonly BUILD_PATH="${BUILD_PWD}/${BUILD_PATH}"
 #
@@ -149,7 +150,7 @@ function compare_images()
 function build_image()
 {
     # Optional function argument to add more arguments to the build command
-    local build_args=${1:-""}
+    local output=${1:-""}
 
     # Build the docker image with the given arguments
     echo -e "\r\n[entrypoint.sh] My job is to build docker image ${TAG}..."
@@ -175,16 +176,14 @@ main()
     # Check that Kaniko configuration exists and contains a key for our registry
     if [[ "$(cat ~/.docker/config.json)" == *"$CI_REGISTRY"* ]];
     then
-        # TODO check if remote image exist ???
-        #
-
         if [[ "${CHECK_BEFORE_PUSH:-}" ]];
         then
             # Define some useful variables
             local local_image=${TAG##*/}.tar
+            local output="type=oci,dest=$local_image"
             
             # Build image without pushing it
-            build_image "--no-push --tar-path ${local_image}"
+            build_image $output
 
             # Compare built image with existing image
             echo -e "\r\n[entrypoint.sh] Comparing built image with existing ${TAG}..."
@@ -209,6 +208,7 @@ main()
             echo -e "\r\n[entrypoint.sh] No 'CHECK_BEFORE_PUSH' parameter found, the image will be built and pushed immediately."
 
             # Build image and push it immediately
+            local output = "type=image,name=$TAG,push=$ALLOWED_PUSH"
             build_image
         fi
     else
