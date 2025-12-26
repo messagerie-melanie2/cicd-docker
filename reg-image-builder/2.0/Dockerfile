@@ -86,6 +86,8 @@ COPY --from=tools /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
 # bash (`ldd /bin/bash`)
 COPY --from=tools /usr/lib/libreadline.so.8 /usr/lib/libreadline.so.8
 COPY --from=tools /usr/lib/libncursesw.so.6 /usr/lib/libncursesw.so.6
+
+RUN ls -liah /usr/lib
 # # jq (`ldd /usr/bin/jq`)
 # COPY --from=tools /usr/lib/libjq.so.1 /usr/lib/libjq.so.1
 # COPY --from=tools /usr/lib/libjq.so.1.0.4 /usr/lib/libjq.so.1.0.4
