@@ -91,11 +91,9 @@ COPY --from=tools /usr/local/bin/* /usr/local/bin/
 ############################################################
 # Builder entrypoint and command(s)
 #
-
-ENV BUILDKITD_FLAGS="--oci-worker-no-process-sandbox"
-
 USER root
 
 RUN echo "kernel.apparmor_restrict_unprivileged_userns=0" >> /etc/sysctl.conf
+RUN sysctl -p
 
 USER 1000
