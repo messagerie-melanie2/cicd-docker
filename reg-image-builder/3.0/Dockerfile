@@ -70,16 +70,16 @@ LABEL \
 
 # Copy binaries and files (including /etc/bash/.bashrc)
 #
-# bash
-# COPY --from=tools /bin/bash /bin/bash
-# COPY --from=tools /etc/bash /etc/bash
+#bash
+COPY --from=tools /bin/bash /bin/bash
+COPY --from=tools /etc/bash /etc/bash
 
 # Copy required libs related to these binaries
 #
 # shared
-# COPY --from=tools /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
-# COPY --from=tools /usr/lib/libreadline.so.8 /usr/lib/libreadline.so.8
-# COPY --from=tools /usr/lib/libncursesw.so.6 /usr/lib/libncursesw.so.6
+COPY --from=tools /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
+COPY --from=tools /usr/lib/libreadline.so.8 /usr/lib/libreadline.so.8
+COPY --from=tools /usr/lib/libncursesw.so.6 /usr/lib/libncursesw.so.6
 ############################################################
 ############################################################
 # Builder required tools
@@ -91,3 +91,11 @@ COPY --from=tools /usr/local/bin/* /usr/local/bin/
 ############################################################
 # Builder entrypoint and command(s)
 #
+COPY files/entrypoint.sh /builder/entrypoint.sh
+RUN chmod 755 /builder/entrypoint.sh
+#
+# Run the script on container startup
+CMD ["exec /builder/entrypoint.sh"]
+#
+# Execute the given command (above, or override) using bash
+ENTRYPOINT ["/bin/bash", "-c"]

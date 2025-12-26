@@ -23,9 +23,8 @@ readonly CI_REGISTRY_USER=${CI_REGISTRY_USER}
 readonly CI_REGISTRY_PASSWORD=${CI_REGISTRY_PASSWORD}
 readonly CI_REGISTRY=${CI_REGISTRY}
 #
-readonly KANIKO_DIGEST_BUILD_ARGS=${KANIKO_DIGEST_BUILD_ARGS}
-readonly KANIKO_FILE_DIGEST=${KANIKO_FILE_DIGEST}
-readonly KANIKO_PROXY_BUILD_ARGS=${KANIKO_PROXY_BUILD_ARGS}
+readonly DOCKER_FILE_DIGEST=${DOCKER_FILE_DIGEST}
+readonly DOCKER_PROXY_BUILD_ARGS=${DOCKER_PROXY_BUILD_ARGS}
 readonly DOCKER_BUILD_ARGS=${DOCKER_BUILD_ARGS}
 #
 readonly TAG=${TAG}
@@ -55,11 +54,6 @@ function compare_images()
     #
     compared_image_tarball+=$reference_image
 
-    
-    # Copy registry credentials from Kaniko
-    mkdir -p /root/.docker
-    ln -sf /kaniko/.docker/config.json /root/.docker/config.json
-    
     for type in $comparison_types;
         do
             # container-diff diff $reference_image $compared_image --type=$type --json > container-diff-$type.json;
@@ -154,26 +148,16 @@ function compare_images()
 ###
 function build_image()
 {
-    # Optional function argument to add more arguments to the kaniko build command
-    local kaniko_args=${1:-""}
+    # Optional function argument to add more arguments to the build command
+    local build_args=${1:-""}
 
     # Build the docker image with the given arguments
     echo -e "\r\n[entrypoint.sh] My job is to build docker image ${TAG}..."
 
-    # Execute Kaniko command, using build args and previously built/given variables
-    # --------------------------------------------------------------------------------------------------------------------------------
-    # || Parameter                  || Description                          || Reference
-    # || --whitelist-var-run=false  || Fixes an error related to /var/run   || https://github.com/GoogleContainerTools/kaniko/issues/506
-    # || --cleanup --cache=false    || Fixes an error related to /bin/bash  || https://github.com/GoogleContainerTools/kaniko/issues/1335
-    executor --context ${BUILD_PATH} \
-      --dockerfile "${BUILD_PATH}/Dockerfile" $KANIKO_PROXY_BUILD_ARGS $DOCKER_BUILD_ARGS \
-      --destination $TAG --whitelist-var-run=false --cleanup --cache=false $kaniko_args
-
-    echo "
-    executor --context ${BUILD_PATH} \
-      --dockerfile \"${BUILD_PATH}/Dockerfile\" $KANIKO_PROXY_BUILD_ARGS $DOCKER_BUILD_ARGS \
-      --destination $TAG --whitelist-var-run=false --cleanup --cache=false $kaniko_args
-    "
+    buildctl-daemonless.sh build \
+        --frontend dockerfile.v0 \
+        --local context="${BUILD_PATH}" --local dockerfile="${BUILD_PATH}" $DOCKER_PROXY_BUILD_ARGS $DOCKER_BUILD_ARGS \
+        --output type=image,name=${$TAG},push=false
 
 }
 
@@ -217,7 +201,7 @@ main()
                 echo -e "\r\n[crane] Pushing the image ${TAG}..."
                 crane push ${local_image} ${TAG}
             else
-                rm -f $KANIKO_FILE_DIGEST
+                rm -f $DOCKER_FILE_DIGEST
                 echo -e "\r\n[entrypoint.sh] Image wasn't pushed, exiting script."
             fi
 
