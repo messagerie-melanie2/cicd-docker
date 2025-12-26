@@ -1,0 +1,4 @@
+concurrent = 4
+check_interval = 4
+shutdown_timeout = 2
+listen_address = ':9252'

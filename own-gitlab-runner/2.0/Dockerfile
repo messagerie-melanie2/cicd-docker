@@ -61,6 +61,7 @@ COPY files/yaml.d /usr/local/etc/yaml.d
 
 # Copy base config file
 COPY files/config/config.toml.template /etc/gitlab-runner/config.toml.template
+COPY files/config/config.toml /etc/gitlab-runner/config.toml
 
 # Copy entrypoint script
 COPY files/entrypoint/entrypoint_override.sh /entrypoint_override

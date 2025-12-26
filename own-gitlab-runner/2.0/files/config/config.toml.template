@@ -1,12 +1,7 @@
-concurrent = 4
-check_interval = 4
-shutdown_timeout = 2
-listen_address = ':9252'
-
 [session_server]
   session_timeout = 1800
 
 [[runners]]
   [runners.docker]
-    privileged = true
+    privileged = false
     security_opt = ["apparmor=unconfined", "seccomp=unconfined"]
