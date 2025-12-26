@@ -82,6 +82,8 @@ COPY --from=tools /etc/bash /etc/bash
 COPY --from=tools /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
 COPY --from=tools /usr/lib/libreadline.so.8 /usr/lib/libreadline.so.8
 COPY --from=tools /usr/lib/libncursesw.so.6 /usr/lib/libncursesw.so.6
+
+RUN ls -liah /usr
 ############################################################
 ############################################################
 # Builder required tools
