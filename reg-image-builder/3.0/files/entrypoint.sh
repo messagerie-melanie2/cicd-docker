@@ -180,7 +180,7 @@ main()
         then
             # Define some useful variables
             local local_image=${TAG##*/}.tar
-            local output="type=oci,dest=$local_image"
+            local output="type=tar,dest=$local_image"
             
             # Build image without pushing it
             build_image $output
