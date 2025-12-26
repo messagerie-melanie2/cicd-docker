@@ -164,17 +164,16 @@ function build_image()
 # Main script instructions
 main()
 {
-    cp -a /kaniko-tmp/. /kaniko/
     # Display exported variables
     # TODO : only if ci-debug
-    echo -e "$(export -p | grep PROXY)"
-    echo -e "$(export -p | grep GITLAB)"
-    echo -e "$(export -p | grep CI)"
-    echo -e "$(export -p | grep RULE)"
-    echo -e '\r\n>> Done 😃 <<\r\n'
+    # echo -e "$(export -p | grep PROXY)"
+    # echo -e "$(export -p | grep GITLAB)"
+    # echo -e "$(export -p | grep CI)"
+    # echo -e "$(export -p | grep RULE)"
+    # echo -e '\r\n>> Done 😃 <<\r\n'
 
     # Check that Kaniko configuration exists and contains a key for our registry
-    if [[ "$(cat /kaniko/.docker/config.json)" == *"$CI_REGISTRY"* ]];
+    if [[ "$(cat ~/.docker/config.json)" == *"$CI_REGISTRY"* ]];
     then
         # TODO check if remote image exist ???
         #
