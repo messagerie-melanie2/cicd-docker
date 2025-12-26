@@ -5,3 +5,8 @@ listen_address = ':9252'
 
 [session_server]
   session_timeout = 1800
+
+[[runners]]
+  [runners.docker]
+    privileged = false
+    security_opt = ["apparmor=unconfined", "seccomp=unconfined"]
