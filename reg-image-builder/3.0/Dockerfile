@@ -91,8 +91,7 @@ COPY --from=tools /usr/local/bin/* /usr/local/bin/
 ############################################################
 # Builder entrypoint and command(s)
 #
-COPY files/entrypoint.sh /builder/entrypoint.sh
-RUN chmod 755 /builder/entrypoint.sh
+COPY --chmod=755 files/entrypoint.sh /builder/entrypoint.sh
 #
 # Run the script on container startup
 CMD ["exec /builder/entrypoint.sh"]
