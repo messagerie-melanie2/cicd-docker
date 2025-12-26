@@ -158,7 +158,7 @@ function build_image()
     buildctl-daemonless.sh build \
         --frontend dockerfile.v0 \
         --local context="${BUILD_PATH}" --local dockerfile="${BUILD_PATH}" $DOCKER_PROXY_BUILD_ARGS $DOCKER_BUILD_ARGS \
-        --output type=image,name="${TAG}",push=false
+        --output $output
 
 }
 
