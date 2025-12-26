@@ -208,7 +208,7 @@ main()
             echo -e "\r\n[entrypoint.sh] No 'CHECK_BEFORE_PUSH' parameter found, the image will be built and pushed immediately."
 
             # Build image and push it immediately
-            local output = "type=image,name=$TAG,push=$ALLOWED_PUSH"
+            local output="type=image,name=$TAG,push=$ALLOWED_PUSH"
             build_image
         fi
     else
