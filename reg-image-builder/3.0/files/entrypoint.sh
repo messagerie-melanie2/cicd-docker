@@ -180,10 +180,12 @@ main()
         then
             # Define some useful variables
             local local_image=${TAG##*/}.tar
-            local output="type=image,name=$TAG,push=false --output type=docker,name=$TAG,dest=$local_image"
+            local output="type=docker,name=$TAG,dest=$local_image"
             
             # Build image without pushing it
             build_image $output
+
+            tar -tf local_image
 
             # Compare built image with existing image
             echo -e "\r\n[entrypoint.sh] Comparing built image with existing ${TAG}..."
