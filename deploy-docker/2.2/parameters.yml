@@ -28,9 +28,6 @@ variables:
   - name: "git_image_tag"
     type: env
     default: "GIT_IMAGE_TAG"
-  - name: "gitlab_domain"
-    type: env
-    default: "GITLAB_DOMAIN"
   - name: "deploy_group_id"
     type: env
     default: "DEPLOY_GROUP_ID"

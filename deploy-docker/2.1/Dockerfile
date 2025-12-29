@@ -43,6 +43,7 @@ FROM ruby:${parent_version:-${parent_version_default}}
 
 ARG cicd_gmcd_token
 ARG deploy_group_id
+ARG gitlab_domain
 
 ENV CICD_GMCD_TOKEN=${cicd_gmcd_token}
 ENV CI_JOB_TOKEN=${ci_job_token}
