@@ -180,16 +180,18 @@ main()
         then
             # Define some useful variables
             local local_image_oci="image_oci.tar"
-            local output="type=oci,name=$TAG,dest=$local_image_oci"
+            local output="type=docker,name=$TAG,dest=$local_image_oci"
             
             # Build image without pushing it
             build_image $output
 
-            tar xf $local_image_oci index.json
-            jq -r '.manifests[0].digest' index.json
+            tar xf $local_image_oci manifest.json
+            cat manifest.json
+            cat manifest.json > $DOCKER_FILE_DIGEST
 
-            local local_image="image_docker.tar"
-            skopeo copy oci-archive:$local_image_oci docker-archive:$local_image
+            #Convert oci image to docker-archive
+            # local local_image="image_docker.tar"
+            # skopeo copy oci-archive:$local_image_oci docker-archive:$local_image
 
             # Compare built image with existing image
             echo -e "\r\n[entrypoint.sh] Comparing built image with existing ${TAG}..."
