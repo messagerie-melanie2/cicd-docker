@@ -206,7 +206,7 @@ main()
                 echo -e "\r\n[crane] Pushing the image ${TAG}..."
                 crane push ${local_image} ${TAG}
             else
-                rm -f $DOCKER_FILE_DIGEST
+                #rm -f $DOCKER_FILE_DIGEST
                 echo -e "\r\n[entrypoint.sh] Image wasn't pushed, exiting script."
             fi
 
