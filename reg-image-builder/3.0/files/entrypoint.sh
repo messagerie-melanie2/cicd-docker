@@ -180,7 +180,7 @@ main()
         then
             # Define some useful variables
             local local_image=${TAG##*/}.tar
-            local output="type=docker,name=$TAG,dest=$local_image"
+            local output="type=docker,name=$TAG,dest=$local_image --output type=image,name=$TAG,push=false"
             
             # Build image without pushing it
             build_image $output
