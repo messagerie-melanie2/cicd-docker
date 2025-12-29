@@ -179,13 +179,13 @@ main()
         if [[ "${CHECK_BEFORE_PUSH:-}" ]];
         then
             # Define some useful variables
-            local local_image_oci=${TAG##*/}_oci.tar
+            local local_image_oci=image_oci.tar
             local output="type=oci,name=$TAG,dest=$local_image_oci"
             
             # Build image without pushing it
             build_image $output
 
-            local local_image=docker_image.tar
+            local local_image=image_docker.tar
             skopeo copy oci-archive:$local_image_oci docker-archive:$local_image
 
             # Compare built image with existing image
