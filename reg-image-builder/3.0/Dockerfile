@@ -40,8 +40,6 @@ RUN apk update && \
     # apt-get clean && \
     # rm -rf /var/lib/apt/lists/*
 
-RUN mv /usr/bin/skopeo /usr/local/bin/skopeo
-
 # Install container-diff
 RUN curl -LO https://storage.googleapis.com/container-diff/v0.17.0/container-diff-linux-amd64 && \
     install container-diff-linux-amd64 /usr/local/bin/container-diff
