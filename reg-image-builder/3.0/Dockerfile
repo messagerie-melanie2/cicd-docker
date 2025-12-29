@@ -31,27 +31,27 @@ ARG image_version_replace=false
 
 # Use the version provided by the build command
 # or fall back to the default one
-FROM alpine:3.17 as tools
+# FROM alpine:3.17 as tools
 
-COPY requirements_alp .
-RUN apk update && \
-    apk upgrade && \
-    apk add $(sed -e '/^#/d' requirements_alp)
-    # apt-get clean && \
-    # rm -rf /var/lib/apt/lists/*
+# COPY requirements_alp .
+# RUN apk update && \
+#     apk upgrade && \
+#     apk add $(sed -e '/^#/d' requirements_alp)
+#     # apt-get clean && \
+#     # rm -rf /var/lib/apt/lists/*
 
-# Install container-diff
-RUN curl -LO https://storage.googleapis.com/container-diff/v0.17.0/container-diff-linux-amd64 && \
-    install container-diff-linux-amd64 /usr/local/bin/container-diff
+# # Install container-diff
+# RUN curl -LO https://storage.googleapis.com/container-diff/v0.17.0/container-diff-linux-amd64 && \
+#     install container-diff-linux-amd64 /usr/local/bin/container-diff
 
-# Install crane
-RUN curl -L https://github.com/google/go-containerregistry/releases/download/v0.17.0/go-containerregistry_Linux_x86_64.tar.gz > go-containerregistry.tar.gz && \
-    tar -xf go-containerregistry.tar.gz  && \
-    install crane /usr/local/bin/crane
+# # Install crane
+# RUN curl -L https://github.com/google/go-containerregistry/releases/download/v0.17.0/go-containerregistry_Linux_x86_64.tar.gz > go-containerregistry.tar.gz && \
+#     tar -xf go-containerregistry.tar.gz  && \
+#     install crane /usr/local/bin/crane
 
-# Install jq
-RUN curl -LO https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 && \
-    install jq-linux64 /usr/local/bin/jq
+# # Install jq
+# RUN curl -LO https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 && \
+#     install jq-linux64 /usr/local/bin/jq
 
 # ENTRYPOINT /bin/bash
 
@@ -77,28 +77,41 @@ RUN apk update && \
     apk upgrade && \
     apk add $(sed -e '/^#/d' requirements_alp)
 
+# Install container-diff
+RUN curl -LO https://storage.googleapis.com/container-diff/v0.17.0/container-diff-linux-amd64 && \
+    install container-diff-linux-amd64 /usr/local/bin/container-diff
+
+# Install crane
+RUN curl -L https://github.com/google/go-containerregistry/releases/download/v0.17.0/go-containerregistry_Linux_x86_64.tar.gz > go-containerregistry.tar.gz && \
+    tar -xf go-containerregistry.tar.gz  && \
+    install crane /usr/local/bin/crane
+
+# Install jq
+RUN curl -LO https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 && \
+    install jq-linux64 /usr/local/bin/jq
+    
 #bash
-COPY --from=tools /bin/bash /bin/bash
-COPY --from=tools /etc/bash /etc/bash
+# COPY --from=tools /bin/bash /bin/bash
+# COPY --from=tools /etc/bash /etc/bash
 
-# Copy required libs related to these binaries
-#
-# shared
+# # Copy required libs related to these binaries
+# #
+# # shared
+# # COPY --from=tools /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
+# # COPY --from=tools /usr/lib/libreadline.so.8 /usr/lib/libreadline.so.8
+# # COPY --from=tools /usr/lib/libncursesw.so.6 /usr/lib/libncursesw.so.6
+
 # COPY --from=tools /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
-# COPY --from=tools /usr/lib/libreadline.so.8 /usr/lib/libreadline.so.8
-# COPY --from=tools /usr/lib/libncursesw.so.6 /usr/lib/libncursesw.so.6
+# COPY --from=tools /usr/lib/libreadline.so.8* /usr/lib/
+# COPY --from=tools /usr/lib/libncursesw.so.6* /usr/lib/
 
-COPY --from=tools /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
-COPY --from=tools /usr/lib/libreadline.so.8* /usr/lib/
-COPY --from=tools /usr/lib/libncursesw.so.6* /usr/lib/
+# RUN ls -liah /usr/lib
+# ############################################################
+# ############################################################
+# # Builder required tools
 
-RUN ls -liah /usr/lib
-############################################################
-############################################################
-# Builder required tools
-
-# Copy bash in that directory
-COPY --from=tools /usr/local/bin/* /usr/local/bin/
+# # Copy bash in that directory
+# COPY --from=tools /usr/local/bin/* /usr/local/bin/
 #
 ############################################################
 ############################################################
