@@ -72,6 +72,11 @@ LABEL \
 #
 USER root
 
+COPY requirements_alp .
+RUN apk update && \
+    apk upgrade && \
+    apk add $(sed -e '/^#/d' requirements_alp)
+
 #bash
 COPY --from=tools /bin/bash /bin/bash
 COPY --from=tools /etc/bash /etc/bash
