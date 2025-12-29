@@ -179,26 +179,17 @@ main()
         if [[ "${CHECK_BEFORE_PUSH:-}" ]];
         then
             # Define some useful variables
-            local local_image="image_oci.tar"
+            local local_image=${TAG##*/}.tar
             local output="type=docker,name=$TAG,dest=$local_image"
             
             # Build image without pushing it
             build_image $output
-
-            # tar xf $local_image_oci index.json
-            # cat index.json > $DOCKER_FILE_DIGEST
-
-            # #Convert oci image to docker image for container-diff
-            # local local_image="image_docker.tar"
-            # skopeo copy oci-archive:$local_image_oci docker-archive:$local_image
 
             # Compare built image with existing image
             echo -e "\r\n[entrypoint.sh] Comparing built image with existing ${TAG}..."
 
             # Compare image to know if there's real changes to push
             compare_images $local_image $TAG "history apt size file node"
-
-            export PUSH=1
 
             if [[ "${PUSH}" == 1 ]]
             then
@@ -220,7 +211,7 @@ main()
 
             cp $DOCKER_FILE_DIGEST ./${DOCKER_FILE_DIGEST_NAME}
             cat ./${DOCKER_FILE_DIGEST_NAME}
-            
+
             else
                 rm -f $DOCKER_FILE_DIGEST
                 echo -e "\r\n[entrypoint.sh] Image wasn't pushed, exiting script."
