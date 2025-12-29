@@ -79,7 +79,7 @@ function compare_images()
     if crane pull ${compared_image} ${compared_image_tarball}
     then
         # Do the comparison using container-diff
-        container-diff diff $reference_image $compared_image_tarball $comparison_types_args --json > $comparison_res_file;
+        container-diff diff oci-archive://$reference_image $compared_image_tarball $comparison_types_args --json > $comparison_res_file;
          # Store changes 
         changes_history=$(jq '.[] | select(.DiffType=="History") |  .Diff.Adds + .Diff.Dels | length' ${comparison_res_file})
         changes_file=$(jq '.[] | select(.DiffType=="File") |  .Diff.Adds + .Diff.Dels | length' ${comparison_res_file})
@@ -180,12 +180,10 @@ main()
         then
             # Define some useful variables
             local local_image=${TAG##*/}.tar
-            local output="type=docker,name=$TAG,dest=$local_image"
+            local output="type=oci,name=$TAG,dest=$local_image"
             
             # Build image without pushing it
             build_image $output
-
-            tar -tf local_image
 
             # Compare built image with existing image
             echo -e "\r\n[entrypoint.sh] Comparing built image with existing ${TAG}..."
