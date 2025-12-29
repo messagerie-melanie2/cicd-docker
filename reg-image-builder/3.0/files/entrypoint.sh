@@ -212,13 +212,11 @@ main()
                 IMAGE_DIGEST=$(crane digest ${TAG})
                 CONFIG_DIGEST=$(crane manifest ${TAG} | jq -r '.config.digest')
 
-                echo """
-                    {
-                    "containerimage.config.digest": "${CONFIG_DIGEST}",
-                    "containerimage.digest": "${IMAGE_DIGEST}",
-                    "image.name": "${TAG}"
-                    }
-                """ > $DOCKER_FILE_DIGEST
+                echo """{
+    \"containerimage.config.digest\": \"${CONFIG_DIGEST}\",
+    \"containerimage.digest\": \"${IMAGE_DIGEST}\",
+    \"image.name\": \"${TAG}\"
+}""" > $DOCKER_FILE_DIGEST
 
             else
                 #rm -f $DOCKER_FILE_DIGEST
