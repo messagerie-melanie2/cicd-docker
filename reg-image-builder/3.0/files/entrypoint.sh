@@ -186,7 +186,7 @@ main()
             build_image $output
 
             local local_image=${TAG##*/}.tar
-            skopeo copy oci-archive:$local_image_oci docker-archive:$local_image:$TAG
+            skopeo copy oci-archive:$local_image_oci docker-archive:$local_image
 
             # Compare built image with existing image
             echo -e "\r\n[entrypoint.sh] Comparing built image with existing ${TAG}..."
