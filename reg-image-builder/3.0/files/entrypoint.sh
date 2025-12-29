@@ -218,8 +218,11 @@ main()
     \"image.name\": \"${TAG}\"
 }""" > $DOCKER_FILE_DIGEST
 
+            cp $DOCKER_FILE_DIGEST ./${DOCKER_FILE_DIGEST_NAME}
+            cat ./${DOCKER_FILE_DIGEST_NAME}
+            
             else
-                #rm -f $DOCKER_FILE_DIGEST
+                rm -f $DOCKER_FILE_DIGEST
                 echo -e "\r\n[entrypoint.sh] Image wasn't pushed, exiting script."
             fi
 
@@ -230,6 +233,9 @@ main()
             # Build image and push it immediately
             local output="type=image,name=$TAG,push=$ALLOWED_PUSH"
             build_image $output
+
+            cp $DOCKER_FILE_DIGEST ./${DOCKER_FILE_DIGEST_NAME}
+            cat ./${DOCKER_FILE_DIGEST_NAME}
         fi
     else
         # Display an informational message
