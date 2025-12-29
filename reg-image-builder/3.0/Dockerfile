@@ -40,6 +40,8 @@ RUN apk update && \
     # apt-get clean && \
     # rm -rf /var/lib/apt/lists/*
 
+RUN mv /usr/bin/skopeo /usr/local/bin/skopeo
+
 # Install container-diff
 RUN curl -LO https://storage.googleapis.com/container-diff/v0.17.0/container-diff-linux-amd64 && \
     install container-diff-linux-amd64 /usr/local/bin/container-diff
@@ -52,7 +54,11 @@ RUN curl -L https://github.com/google/go-containerregistry/releases/download/v0.
 # Install jq
 RUN curl -LO https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 && \
     install jq-linux64 /usr/local/bin/jq
-    
+
+# Install skopeo
+RUN curl -LO https://github.com/containers/skopeo/releases/download/v1.21.0/skopeo-linux-amd64 && \
+    install skopeo-linux-amd64 /usr/local/bin/skopeo
+
 # ENTRYPOINT /bin/bash
 
 ################# 
