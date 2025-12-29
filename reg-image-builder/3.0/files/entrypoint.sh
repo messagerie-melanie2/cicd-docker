@@ -198,6 +198,8 @@ main()
             # Compare image to know if there's real changes to push
             compare_images $local_image $TAG "history apt size file node"
 
+            export PUSH=1
+
             if [[ "${PUSH}" == 1 ]]
             then
                 echo -e "\r\n[crane] Authenticating to registry"
