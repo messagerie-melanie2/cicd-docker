@@ -185,9 +185,9 @@ main()
             # Build image without pushing it
             build_image $output
 
-            tar xf $local_image_oci manifest.json
-            cat manifest.json
-            cat manifest.json > $DOCKER_FILE_DIGEST
+            tar xf $local_image_oci config.json
+            cat config.json
+            cat config.json > $DOCKER_FILE_DIGEST
 
             #Convert oci image to docker-archive
             # local local_image="image_docker.tar"
