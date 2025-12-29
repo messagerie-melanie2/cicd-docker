@@ -13,7 +13,7 @@ ARG parent_version
 ARG parent_version_default=v15.10.0
 #ARG parent_version_replace_with=1.0
 
-# Version of the Docker image built with this Dockerfile 
+# Version of the Docker image built with this Dockerfile
 # Used to build full version string : {parent_version}_{image_version}
 #
 # image_version - version provided by the build command ('docker build --build-arg image_version={...} .')
