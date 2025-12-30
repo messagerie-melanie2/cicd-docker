@@ -20,6 +20,6 @@ fi
 # @see https://hub.docker.com/r/gitlab/gitlab-runner/dockerfile
 # @see https://gitlab.com/gitlab-org/gitlab-runner/-/blob/main/dockerfiles/runner/ubuntu/entrypoint
 # @see https://github.com/Yelp/dumb-init#session-behavior
-/entrypoint ${DEBUG_TRIGGER:-} run --user=gitlab-runner --working-directory=/home/gitlab-runner
+/entrypoint ${DEBUG_TRIGGER:-} run --user=root --working-directory=/root
 
 # --- EOF ---
