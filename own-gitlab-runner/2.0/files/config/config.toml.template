@@ -3,5 +3,6 @@
 
 [[runners]]
   [runners.docker]
+    userns_mode = "dockerjail"
     privileged = false
     security_opt = ["apparmor=unconfined", "seccomp=unconfined"]
