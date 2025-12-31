@@ -60,6 +60,7 @@ COPY --from=pullentrypoint /source/docker-tools/python-docker-entrypoint/yamlent
 COPY files/yaml.d /usr/local/etc/yaml.d
 
 # Copy base config file
+COPY files/config/config.toml.template /etc/gitlab-runner/config.toml.template
 COPY files/config/config.toml /etc/gitlab-runner/config.toml
 
 # Copy entrypoint script

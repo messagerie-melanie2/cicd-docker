@@ -23,12 +23,12 @@ readonly CI_REGISTRY_USER=${CI_REGISTRY_USER}
 readonly CI_REGISTRY_PASSWORD=${CI_REGISTRY_PASSWORD}
 readonly CI_REGISTRY=${CI_REGISTRY}
 #
-readonly KANIKO_DIGEST_BUILD_ARGS=${KANIKO_DIGEST_BUILD_ARGS}
-readonly KANIKO_FILE_DIGEST=${KANIKO_FILE_DIGEST}
-readonly KANIKO_PROXY_BUILD_ARGS=${KANIKO_PROXY_BUILD_ARGS}
+readonly DOCKER_FILE_DIGEST=${DOCKER_FILE_DIGEST}
+readonly DOCKER_PROXY_BUILD_ARGS=${DOCKER_PROXY_BUILD_ARGS}
 readonly DOCKER_BUILD_ARGS=${DOCKER_BUILD_ARGS}
 #
 readonly TAG=${TAG}
+readonly ALLOWED_PUSH=${ALLOWED_PUSH}
 readonly BUILD_PWD=${BUILD_PWD}
 readonly BUILD_PATH="${BUILD_PWD}/${BUILD_PATH}"
 #
@@ -55,11 +55,6 @@ function compare_images()
     #
     compared_image_tarball+=$reference_image
 
-    
-    # Copy registry credentials from Kaniko
-    mkdir -p /root/.docker
-    ln -sf /kaniko/.docker/config.json /root/.docker/config.json
-    
     for type in $comparison_types;
         do
             # container-diff diff $reference_image $compared_image --type=$type --json > container-diff-$type.json;
@@ -154,54 +149,41 @@ function compare_images()
 ###
 function build_image()
 {
-    # Optional function argument to add more arguments to the kaniko build command
-    local kaniko_args=${1:-""}
+    # Optional function argument to add more arguments to the build command
+    local output=${1:-""}
 
     # Build the docker image with the given arguments
     echo -e "\r\n[entrypoint.sh] My job is to build docker image ${TAG}..."
 
-    # Execute Kaniko command, using build args and previously built/given variables
-    # --------------------------------------------------------------------------------------------------------------------------------
-    # || Parameter                  || Description                          || Reference
-    # || --whitelist-var-run=false  || Fixes an error related to /var/run   || https://github.com/GoogleContainerTools/kaniko/issues/506
-    # || --cleanup --cache=false    || Fixes an error related to /bin/bash  || https://github.com/GoogleContainerTools/kaniko/issues/1335
-    executor --context ${BUILD_PATH} \
-      --dockerfile "${BUILD_PATH}/Dockerfile" $KANIKO_PROXY_BUILD_ARGS $DOCKER_BUILD_ARGS \
-      --destination $TAG --whitelist-var-run=false --cleanup --cache=false $kaniko_args
-
-    echo "
-    executor --context ${BUILD_PATH} \
-      --dockerfile \"${BUILD_PATH}/Dockerfile\" $KANIKO_PROXY_BUILD_ARGS $DOCKER_BUILD_ARGS \
-      --destination $TAG --whitelist-var-run=false --cleanup --cache=false $kaniko_args
-    "
+    buildctl-daemonless.sh build \
+        --frontend dockerfile.v0 \
+        --local context="${BUILD_PATH}" --local dockerfile="${BUILD_PATH}" $DOCKER_PROXY_BUILD_ARGS $DOCKER_BUILD_ARGS \
+        --output $output
 
 }
 
 # Main script instructions
 main()
 {
-    cp -a /kaniko-tmp/. /kaniko/
     # Display exported variables
     # TODO : only if ci-debug
-    echo -e "$(export -p | grep PROXY)"
-    echo -e "$(export -p | grep GITLAB)"
-    echo -e "$(export -p | grep CI)"
-    echo -e "$(export -p | grep RULE)"
-    echo -e '\r\n>> Done 😃 <<\r\n'
+    # echo -e "$(export -p | grep PROXY)"
+    # echo -e "$(export -p | grep GITLAB)"
+    # echo -e "$(export -p | grep CI)"
+    # echo -e "$(export -p | grep RULE)"
+    # echo -e '\r\n>> Done 😃 <<\r\n'
 
     # Check that Kaniko configuration exists and contains a key for our registry
-    if [[ "$(cat /kaniko/.docker/config.json)" == *"$CI_REGISTRY"* ]];
+    if [[ "$(cat ~/.docker/config.json)" == *"$CI_REGISTRY"* ]];
     then
-        # TODO check if remote image exist ???
-        #
-
         if [[ "${CHECK_BEFORE_PUSH:-}" ]];
         then
             # Define some useful variables
             local local_image=${TAG##*/}.tar
+            local output="type=docker,name=$TAG,dest=$local_image"
             
             # Build image without pushing it
-            build_image "--no-push --tar-path ${local_image}"
+            build_image $output
 
             # Compare built image with existing image
             echo -e "\r\n[entrypoint.sh] Comparing built image with existing ${TAG}..."
@@ -216,8 +198,22 @@ main()
 
                 echo -e "\r\n[crane] Pushing the image ${TAG}..."
                 crane push ${local_image} ${TAG}
+                
+                # Récupérer digest
+                IMAGE_DIGEST=$(crane digest ${TAG})
+                CONFIG_DIGEST=$(crane manifest ${TAG} | jq -r '.config.digest')
+
+                echo """{
+    \"containerimage.config.digest\": \"${CONFIG_DIGEST}\",
+    \"containerimage.digest\": \"${IMAGE_DIGEST}\",
+    \"image.name\": \"${TAG}\"
+}""" > $DOCKER_FILE_DIGEST
+
+            cp $DOCKER_FILE_DIGEST ./${DOCKER_FILE_DIGEST_NAME}
+            cat ./${DOCKER_FILE_DIGEST_NAME}
+
             else
-                rm -f $KANIKO_FILE_DIGEST
+                rm -f $DOCKER_FILE_DIGEST
                 echo -e "\r\n[entrypoint.sh] Image wasn't pushed, exiting script."
             fi
 
@@ -226,7 +222,11 @@ main()
             echo -e "\r\n[entrypoint.sh] No 'CHECK_BEFORE_PUSH' parameter found, the image will be built and pushed immediately."
 
             # Build image and push it immediately
-            build_image
+            local output="type=image,name=$TAG,push=$ALLOWED_PUSH"
+            build_image $output
+
+            cp $DOCKER_FILE_DIGEST ./${DOCKER_FILE_DIGEST_NAME}
+            cat ./${DOCKER_FILE_DIGEST_NAME}
         fi
     else
         # Display an informational message

@@ -19,6 +19,7 @@ EXECUTOR_DEFAULT='docker'
 DOCKER_IMAGE_DEFAULT='ruby:2.6'
 DOCKER_HELPER_DEFAULT='gitlab/gitlab-runner-helper:x86_64-v17.11.3'
 PROXY_PROTOCOL_DEFAULT='http://'
+TEMPLATE_CONFIG_PATH_DEFAULT = "/etc/gitlab-runner/config.toml.template"
 
 # Global/Env variables
 TYPE=os.environ.get('TYPE')
@@ -33,6 +34,7 @@ REGISTRY_MIRROR=os.environ.get('REGISTRY_MIRROR','')
 GITLAB_URL=os.environ.get('GITLAB_URL',GITLAB_URL_DEFAULT)
 DOCKER_HELPER=os.environ.get('DOCKER_HELPER',DOCKER_HELPER_DEFAULT)
 PROXY_PROTOCOL=os.environ.get('PROXY_PROTOCOL',PROXY_PROTOCOL_DEFAULT)
+TEMPLATE_CONFIG_PATH=os.environ.get('TEMPLATE_CONFIG_PATH',TEMPLATE_CONFIG_PATH_DEFAULT)
 
 STATUS_RUNNER_TO_DELETE=["offline","never_contacted"]
 RUNNERS_TYPE_INFO={'groups':{'type_name': 'group_type', 'id_name':'group_id'},'projects':{'type_name': 'project_type', 'id_name':'project_id'}}
@@ -145,7 +147,7 @@ def get_runners_to_delete(runners) :
 
 def setup_runner(runner_info) :
     print('[gitlab-runner-container] Registering a new runner :')
-    cmd = ["gitlab-runner", "register","--non-interactive","--url",GITLAB_URL,"--token", runner_info["token"], "--executor", EXECUTOR, "--docker-image", DOCKER_IMAGE, "--docker-helper-image", DOCKER_HELPER]
+    cmd = ["gitlab-runner", "register","--non-interactive","--url",GITLAB_URL,"--token", runner_info["token"], "--executor", EXECUTOR, "--docker-image", DOCKER_IMAGE, "--docker-helper-image", DOCKER_HELPER, "--template-config", TEMPLATE_CONFIG_PATH]
     cmd += PROXY_ARGS
     subprocess.run(cmd)
     print("[gitlab-runner-container] Done !\r")
