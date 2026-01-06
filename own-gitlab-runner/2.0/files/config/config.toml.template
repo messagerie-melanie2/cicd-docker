@@ -3,7 +3,7 @@
 
 [[runners]]
   [runners.docker]
-    tls_verify = true
+    tls_verify = false
     userns_mode = "host"
     privileged = false
     security_opt = ["apparmor=unconfined", "seccomp=unconfined"]
