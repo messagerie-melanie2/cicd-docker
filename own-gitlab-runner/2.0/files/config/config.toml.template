@@ -4,7 +4,7 @@
 [[runners]]
 tls-ca-file = "/etc/gitlab-runner/ca.pem" 
   [runners.docker]
-    tls_verify = yes
+    tls_verify = true
     userns_mode = "host"
     privileged = false
     security_opt = ["apparmor=unconfined", "seccomp=unconfined"]
