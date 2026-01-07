@@ -63,6 +63,9 @@ COPY files/yaml.d /usr/local/etc/yaml.d
 COPY files/config/config.toml.template /etc/gitlab-runner/config.toml.template
 COPY files/config/config.toml /etc/gitlab-runner/config.toml
 
+# Copy ca cert file
+COPY files/ca_certificate/ca.pem /etc/gitlab-runner/ca.pem
+
 # Copy entrypoint script
 COPY files/entrypoint/entrypoint_override.sh /entrypoint_override
 COPY files/entrypoint/manage_runners.py /usr/local/etc/template.d/gitlabrunner/manage_runners.py

@@ -2,8 +2,9 @@
   session_timeout = 1800
 
 [[runners]]
+tls-ca-file = "/etc/gitlab-runner/ca.pem" 
   [runners.docker]
-    tls_verify = false
+    tls_verify = yes
     userns_mode = "host"
     privileged = false
     security_opt = ["apparmor=unconfined", "seccomp=unconfined"]
