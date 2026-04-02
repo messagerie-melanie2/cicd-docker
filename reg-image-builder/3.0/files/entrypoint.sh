@@ -28,6 +28,7 @@ readonly DOCKER_PROXY_BUILD_ARGS=${DOCKER_PROXY_BUILD_ARGS}
 readonly DOCKER_BUILD_ARGS=${DOCKER_BUILD_ARGS}
 #
 readonly TAG=${TAG}
+readonly TAG_LATEST=${TAG_LATEST}
 readonly ALLOWED_PUSH=${ALLOWED_PUSH}
 readonly BUILD_PWD=${BUILD_PWD}
 readonly BUILD_PATH="${BUILD_PWD}/${BUILD_PATH}"
@@ -198,6 +199,11 @@ main()
 
                 echo -e "\r\n[crane] Pushing the image ${TAG}..."
                 crane push ${local_image} ${TAG}
+
+                if [ -n "$TAG_LATEST" ]; then
+                    echo -e "\r\n[crane] Pushing the image ${TAG}..."
+                    crane push ${local_image} ${TAG_LATEST}
+                fi
                 
                 # Récupérer digest
                 IMAGE_DIGEST=$(crane digest ${TAG})
