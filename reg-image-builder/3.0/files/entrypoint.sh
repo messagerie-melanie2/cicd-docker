@@ -28,7 +28,6 @@ readonly DOCKER_PROXY_BUILD_ARGS=${DOCKER_PROXY_BUILD_ARGS}
 readonly DOCKER_BUILD_ARGS=${DOCKER_BUILD_ARGS}
 #
 readonly TAG=${TAG}
-readonly TAG_LATEST=${TAG_LATEST}
 readonly ALLOWED_PUSH=${ALLOWED_PUSH}
 readonly BUILD_PWD=${BUILD_PWD}
 readonly BUILD_PATH="${BUILD_PWD}/${BUILD_PATH}"
@@ -201,7 +200,7 @@ main()
                 crane push ${local_image} ${TAG}
 
                 if [ -n "$TAG_LATEST" ]; then
-                    echo -e "\r\n[crane] Pushing the image ${TAG}..."
+                    echo -e "\r\n[crane] Pushing the image ${TAG_LATEST}..."
                     crane push ${local_image} ${TAG_LATEST}
                 fi
                 
@@ -229,6 +228,12 @@ main()
 
             # Build image and push it immediately
             local output="type=image,name=$TAG,push=$ALLOWED_PUSH"
+            if [ -n "$TAG_LATEST" ]; then
+                local images="$TAG,$TAG_LATEST"
+                local output='type=image,name="'"${images}"'",push='"${ALLOWED_PUSH}"
+            else
+                local output="type=image,name=$TAG,push=$ALLOWED_PUSH"
+            fi
             build_image $output
 
             cp $DOCKER_FILE_DIGEST ./${DOCKER_FILE_DIGEST_NAME}
