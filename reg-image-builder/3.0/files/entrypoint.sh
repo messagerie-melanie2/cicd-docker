@@ -230,7 +230,7 @@ main()
             local output="type=image,name=$TAG,push=$ALLOWED_PUSH"
             if [ -n "$TAG_LATEST" ]; then
                 local images="$TAG,$TAG_LATEST"
-                local output="type=image,name=${images},push=${ALLOWED_PUSH}"
+                local output='type=image,"name='"${images}"'",push='"${ALLOWED_PUSH}"
             else
                 local output="type=image,name=$TAG,push=$ALLOWED_PUSH"
             fi
