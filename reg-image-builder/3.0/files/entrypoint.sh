@@ -198,6 +198,11 @@ main()
 
                 echo -e "\r\n[crane] Pushing the image ${TAG}..."
                 crane push ${local_image} ${TAG}
+
+                if [ -n "$TAG_LATEST" ]; then
+                    echo -e "\r\n[crane] Pushing the image ${TAG_LATEST}..."
+                    crane push ${local_image} ${TAG_LATEST}
+                fi
                 
                 # Récupérer digest
                 IMAGE_DIGEST=$(crane digest ${TAG})
@@ -223,6 +228,12 @@ main()
 
             # Build image and push it immediately
             local output="type=image,name=$TAG,push=$ALLOWED_PUSH"
+            if [ -n "$TAG_LATEST" ]; then
+                local images="$TAG,$TAG_LATEST"
+                local output='type=image,"name='"${images}"'",push='"${ALLOWED_PUSH}"
+            else
+                local output="type=image,name=$TAG,push=$ALLOWED_PUSH"
+            fi
             build_image $output
 
             cp $DOCKER_FILE_DIGEST ./${DOCKER_FILE_DIGEST_NAME}
