@@ -19,7 +19,7 @@ ARG parent_version_default=2.6
 # image_version - version provided by the build command ('docker build --build-arg image_version={...} .')
 # image_version_replace - if true, image_version will replace the image_version contained in parent_version in the tag of the docker image
 
-# ARG image_version
+# ARG image_version 
 ARG image_version_replace=true
 
 ARG registry_git_image_path
