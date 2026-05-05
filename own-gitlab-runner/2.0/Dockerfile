@@ -28,7 +28,7 @@ ARG git_image_name
 ARG git_image_tag
 # Docker Multistage : récupération de l'entrypoint
 ###############################################################################
-FROM ${registry}${registry_git_image_path}/${git_image_name}:${git_image_tag} AS pullentrypoint
+FROM ${registry}/${registry_git_image_path}/${git_image_name}:${git_image_tag} AS pullentrypoint
 ARG build_branch
 ARG ci_job_token
 ARG docker_tools_path
