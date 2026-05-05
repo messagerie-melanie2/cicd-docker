@@ -20,7 +20,7 @@ ARG parent_version_default=v15.10.0
 # image_version_default - fallback value if no image_version was found, also used by the python script (for CI/CD)
 # image_version_replace - if true, image_version will replace the image_version contained in parent_version in the tag of the docker image
 #
-# ARG image_version 
+# ARG image_version
 ARG image_version_replace=true
 
 ARG registry_git_image_path
