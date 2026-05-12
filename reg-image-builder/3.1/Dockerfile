@@ -12,7 +12,7 @@ ARG registry_default=registry.gitlab-forge.din.developpement-durable.gouv.fr/snu
 
 ARG parent_version
 ARG parent_version_default=rootless
-ARG parent_version_replace_with=3.0
+ARG parent_version_replace_with=3.1
 
 # Version of the Docker image built with this Dockerfile 
 # Used to build full version string : {parent_version}_{image_version}
@@ -22,7 +22,7 @@ ARG parent_version_replace_with=3.0
 # image_version_replace - if true, image_version will replace the image_version contained in parent_version in the tag of the docker image
 #
 ARG image_version
-ARG image_version_default=3.0
+ARG image_version_default=3.1
 ARG image_version_replace=false
 
 ############################################################################# 
