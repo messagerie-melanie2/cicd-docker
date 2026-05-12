@@ -73,7 +73,7 @@ function compare_images()
     
     echo -e "\r\n[crane] Authenticating to registry gitlab"
     crane auth login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    crane auth login -u $CI_REGISTRY_PULL_USER -p $CI_REGISTRY_PULL_PASSWORD $CI_REGISTRY_PULL
+    crane auth login -u $CI_PULL_REGISTRY_USER -p $CI_PULL_REGISTRY_PASSWORD $CI_PULL_REGISTRY
 
     echo -e "\r\n[crane] Authenticating to registry docker"
     crane auth login -u $DOCKERHUB_USER -p $DOCKERHUB_TOKEN registry.hub.docker.com
