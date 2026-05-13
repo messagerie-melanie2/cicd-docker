@@ -7,9 +7,6 @@ variables:
   - name: "cicd_gmcd_token"
     type: env
     default: "CICD_GMCD_TOKEN"
-  - name: "registry"
-    type: env
-    default: "REGISTRY_DOMAIN"
   - name: "gitlab_domain"
     type: env
     default: "GITLAB_DOMAIN"

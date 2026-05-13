@@ -1,0 +1,5 @@
+parent_version:
+- version_name: 'v0.26.3-rootless'
+  version_number:
+no_build: False
+no_repo: False

@@ -4,9 +4,6 @@ parent_version:
 no_build: False
 no_repo: False
 variables:
-  - name: "registry"
-    type: env
-    default: "REGISTRY_DOMAIN"
   - name: "gitlab_domain"
     type: env
     default: "GITLAB_DOMAIN"
