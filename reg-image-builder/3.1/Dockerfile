@@ -15,7 +15,7 @@ ARG parent_version_default=rootless
 ARG parent_version_replace_with=3.1
 
 # Version of the Docker image built with this Dockerfile 
-# Used to build full version string : {parent_version}_{image_version}
+# Used to build full version string : {parent_version}_{image_version} 
 # 
 # image_version - version provided by the build command ('docker build --build-arg image_version={...} .')
 # image_version_default - fallback value if no image_version was found, also used by the python script (for CI/CD)
