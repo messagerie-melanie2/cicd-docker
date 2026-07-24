@@ -37,8 +37,8 @@ PATH_GIT=os.environ.get('PATH_GIT',PATH_GIT_DEFAULT)
 def pull_cluster_repo(path) :
     subprocess.run(['sh',path + 'gitpull.sh',path])
 
-def find_docker_compose_paths(path,registry) :
-    tag = os.environ["TAG"]
+def find_docker_compose_paths(path,registry,image_info) :
+    tag = image_info["image_name_with_registry"]
     docker_compose_paths = []
 
     tag = f'{registry}/{tag.split("/",1)[-1]}'
@@ -172,11 +172,11 @@ def main():
     
     cluster_by_registry = []
     for registry in REGISTRY_PATHS :
-        docker_compose_paths = find_docker_compose_paths(PATH_GIT,registry)
-        docker_compose_paths_typed = determine_type_docker_paths(docker_compose_paths)
-        clusters = get_clusters(PATH_GIT,docker_compose_paths_typed)
         images_info = get_image_info(registry)
         for image in images_info :
+            docker_compose_paths = find_docker_compose_paths(PATH_GIT,registry,image)
+            docker_compose_paths_typed = determine_type_docker_paths(docker_compose_paths)
+            clusters = get_clusters(PATH_GIT,docker_compose_paths_typed)
             cluster_by_registry.append({'registry':registry, 'clusters': clusters, 'image_info': image})
 
     os.environ["http_proxy"]=""

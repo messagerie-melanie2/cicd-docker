@@ -77,7 +77,6 @@ COPY --from=pullentrypoint /source/docker-tools/python-docker-entrypoint/yamlent
 COPY files/yaml.d /usr/local/etc/yaml.d
 
 RUN mkdir -p /usr/local/clusters
-COPY files/entrypoint /usr/local/clusters
 COPY files/script /usr/local/clusters
 
 # Configure image settings
@@ -89,6 +88,8 @@ USER root
 RUN chmod +x /usr/local/clusters/git_clone_clusters.py
 
 RUN /usr/local/clusters/git_clone_clusters.py
+
+COPY files/entrypoint /usr/local/clusters
 
 ENV CICD_GMCD_TOKEN=""
 
