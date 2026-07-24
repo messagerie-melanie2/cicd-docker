@@ -16,9 +16,6 @@ variables:
   - name: "cicd_unit_test_path"
     type: env
     default: "CICD_UNIT_TEST_PATH"
-  - name: "registry_git_image_path"
-    type: env
-    default: "REGISTRY_GIT_IMAGE_PATH"
   - name: "git_image_name"
     type: env
     default: "GIT_IMAGE_NAME"
