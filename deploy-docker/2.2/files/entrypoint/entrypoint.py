@@ -119,7 +119,8 @@ def get_clusters(path, docker_compose_paths_typed):
 def get_image_info(registry):
     name = os.environ["NAME"]
     path = f"{name}_metadata.json"
-    image_info = {}
+
+    images_info = []
     metadata = {}
 
     try:
@@ -130,17 +131,20 @@ def get_image_info(registry):
         print("metadata not found or can't be load... ({0})".format(err))
     else :
         print(f"metadata: {metadata} ")
-        image_name_with_registry = metadata.get("image.name")
+        image_metadata = metadata.get("image.name")
 
-        if image_name_with_registry != None :
-            if registry not in image_name_with_registry :
-                image_name_with_registry = f'{registry}/{image_name_with_registry.split("/",1)[-1]}'
-            image_name = image_name_with_registry.split("/")[-1]
-        
-        image_info = {"image_name_with_registry":image_name_with_registry,"image_name":image_name,"latest_docker_image_digest":metadata.get("containerimage.digest")}
-        print(f"image_info: {image_info} ")
+        if image_metadata != None :
+            tags_created = image_metadata.split(",")
+            for tag in tags_created :
+                image_name_with_registry = tag
+                if registry not in image_name_with_registry :
+                    image_name_with_registry = f'{registry}/{image_name_with_registry.split("/",1)[-1]}'
+                image_name = image_name_with_registry.split("/")[-1]
+                info = {"image_name_with_registry":image_name_with_registry,"image_name":image_name,"latest_docker_image_digest":metadata.get("containerimage.digest")}
+                images_info.append(info)
+                print(f"image_info: {info} ")
     
-    return image_info
+    return images_info
 
 
 def trigger_jenkins(cluster_by_registry) :
@@ -171,15 +175,16 @@ def main():
         docker_compose_paths = find_docker_compose_paths(PATH_GIT,registry)
         docker_compose_paths_typed = determine_type_docker_paths(docker_compose_paths)
         clusters = get_clusters(PATH_GIT,docker_compose_paths_typed)
-        image_info = get_image_info(registry)
-        cluster_by_registry.append({'registry':registry, 'clusters': clusters, 'image_info': image_info})
+        images_info = get_image_info(registry)
+        for image in images_info :
+            cluster_by_registry.append({'registry':registry, 'clusters': clusters, 'image_info': image})
 
     os.environ["http_proxy"]=""
     os.environ["HTTP_PROXY"]=""
     os.environ["https_proxy"]=""
     os.environ["HTTPS_PROXY"]=""
 
-    if image_info != {} :
+    if len(cluster_by_registry) != 0 :
         trigger_jenkins(cluster_by_registry)
 
 #=======================================================#
