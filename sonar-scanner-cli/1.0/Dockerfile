@@ -27,28 +27,13 @@ ARG image_version_replace=true
 
 # Use the version provided by the build command
 # or fall back to the default one
-FROM debian:${parent_version:-${parent_version_default}}
+FROM sonarsource/sonar-scanner-cli:${parent_version:-${parent_version_default}}
 
 # Add image information
 LABEL \
-    category="git" \
-    scope="ci" \
-    target="generic" \
-    maintainers="TOLIMAT Hamza"
-
-# Set non interactive frontend for debian apt
-ENV DEBIAN_FRONTEND=noninteractive
-
-COPY requirements_deb .
-RUN apt-get update && \
-    apt-get -y upgrade && \
-    apt-get install -y --no-install-recommends $(sed -e '/^#/d' requirements_deb) && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/
-
-COPY files/clonegit.py /usr/local/bin/
-RUN mkdir /source
-
-CMD [ "/usr/local/bin/clonegit.py" ]
+    category="sonar" \
+    scope="scanner" \
+    target="cli" \
+    maintainers="Tolimat Hamza"
 
 #
