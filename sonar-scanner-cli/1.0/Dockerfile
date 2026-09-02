@@ -36,4 +36,7 @@ LABEL \
     target="cli" \
     maintainers="Tolimat Hamza"
 
+COPY files/sonar-project.properties.default /usr/src/sonar-project.properties.default
+COPY files/before_scan.sh /entrypoint/before_scan.sh
+
 #
