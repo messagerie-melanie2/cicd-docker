@@ -38,7 +38,7 @@ LABEL \
     maintainers="TOLIMAT Hamza"
 
 # Copy binaries and files (including /etc/bash/.bashrc)
-#
+# 
 USER root
 
 COPY requirements_alp .
