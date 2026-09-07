@@ -4,3 +4,4 @@ parent_version:
   latest: True
 no_build: False
 no_repo: False
+latest_versions: True
