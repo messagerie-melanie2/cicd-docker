@@ -76,7 +76,7 @@ WORKDIR /usr/local/entrypoint
 ARG gitlab_domain
 ARG cicd_unit_test_path
 
-RUN git clone https://gitlab-ci-token:${ci_job_token}@${gitlab_domain}${cicd_unit_test_path}.git
+RUN git clone https://gitlab-ci-token:${ci_job_token}@gitlab-forge.din.developpement-durable.gouv.fr/snum/detn/gmcd/cicd-unit-test.git
 
 CMD ["sh", "/usr/local/entrypoint/launch_unit_test.sh"]
 ########
