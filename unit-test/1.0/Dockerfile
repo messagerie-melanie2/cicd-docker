@@ -68,7 +68,7 @@ COPY files/yaml.d /usr/local/etc/yaml.d
 COPY files/entrypoint /usr/local/entrypoint
 RUN mkdir /usr/local/etc/template.d
 
-# Configure image settings
+# Configure image settings 
 ENV TZ Europe/Paris
 
 USER root
