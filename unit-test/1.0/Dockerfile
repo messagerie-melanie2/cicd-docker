@@ -33,12 +33,12 @@ ARG docker_tools_path
 ARG gitlab_domain
 RUN /usr/local/bin/clonegit.py "https://gitlab-ci-token:${ci_job_token}@${gitlab_domain}${docker_tools_path}.git" ${build_branch}
 
-# Docker Multistage : récupération de l'entrypoint
+# Docker Multistage : récupération des scripts unit test
 ###############################################################################
 FROM ${registry}/${git_image_name}:${git_image_tag} AS pullunittest
-ARG build_branch
 ARG ci_job_token
-RUN /usr/local/bin/clonegit.py "https://gitlab-ci-token:${ci_job_token}@${gitlab_domain}snum/detn/gmcd/cicd-unit-test.git" ${build_branch}
+ARG gitlab_domain
+RUN /usr/local/bin/clonegit.py "https://gitlab-ci-token:${ci_job_token}@${gitlab_domain}snum/detn/gmcd/cicd-unit-test.git" main
 
 ############################################################################# 
 # Use the version provided by the build command
