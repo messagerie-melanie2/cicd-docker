@@ -36,7 +36,9 @@ RUN /usr/local/bin/clonegit.py "https://gitlab-ci-token:${ci_job_token}@${gitlab
 # Docker Multistage : récupération de l'entrypoint
 ###############################################################################
 FROM ${registry}/${git_image_name}:${git_image_tag} AS pullunittest
-RUN /usr/local/bin/clonegit.py "https://gitlab-ci-token:${ci_job_token}@gitlab-forge.din.developpement-durable.gouv.fr/snum/detn/gmcd/cicd-unit-test.git" ${build_branch}
+ARG build_branch
+ARG ci_job_token
+RUN /usr/local/bin/clonegit.py "https://gitlab-ci-token:${ci_job_token}@${gitlab_domain}snum/detn/gmcd/cicd-unit-test.git" ${build_branch}
 
 ############################################################################# 
 # Use the version provided by the build command
