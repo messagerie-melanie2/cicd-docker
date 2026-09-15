@@ -33,6 +33,12 @@ ARG docker_tools_path
 ARG gitlab_domain
 RUN /usr/local/bin/clonegit.py "https://gitlab-ci-token:${ci_job_token}@${gitlab_domain}${docker_tools_path}.git" ${build_branch}
 
+# Docker Multistage : récupération de l'entrypoint
+###############################################################################
+FROM ${registry}/${git_image_name}:${git_image_tag} AS pullunittest
+ARG build_branch
+RUN /usr/local/bin/clonegit.py "https://gitlab-ci-token:${ci_job_token}@gitlab-forge.din.developpement-durable.gouv.fr/snum/detn/gmcd/cicd-unit-test.git" ${build_branch}
+
 ############################################################################# 
 # Use the version provided by the build command
 # or fall back to the default one
@@ -66,16 +72,13 @@ COPY --from=pullentrypoint /source/docker-tools/python-docker-entrypoint/yamlent
 COPY files/yaml.d /usr/local/etc/yaml.d
 COPY files/entrypoint /usr/local/entrypoint
 RUN mkdir /usr/local/etc/template.d
+COPY --from=pullunittest /source/cicd-unit-test /usr/local/entrypoint/cicd-unit-test
 
 # Configure image settings 
 ENV TZ Europe/Paris
 
 USER root
 WORKDIR /usr/local/entrypoint
-
-FROM ${registry}/${git_image_name}:${git_image_tag} AS pullunittest
-ARG build_branch
-RUN /usr/local/bin/clonegit.py "https://gitlab-ci-token:${ci_job_token}@gitlab-forge.din.developpement-durable.gouv.fr/snum/detn/gmcd/cicd-unit-test.git" ${build_branch}
 
 CMD ["sh", "/usr/local/entrypoint/launch_unit_test.sh"]
 ########
