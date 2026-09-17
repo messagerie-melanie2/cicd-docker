@@ -2,3 +2,4 @@ pytest-playwright
 pytest-xdist
 pyyaml
 requests
+pytest
