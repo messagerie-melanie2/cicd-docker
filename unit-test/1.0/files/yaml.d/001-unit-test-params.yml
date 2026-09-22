@@ -7,6 +7,11 @@ variables:
     default_value: '1'
     help: 'Number of process launched by pytest'
     fail_if_empty: True
+  NUM_ITEM:
+    type: env
+    default_value: '1'
+    help: 'Number of tests distributed among pytest processes'
+    fail_if_empty: True
   ENTRYPOINT_NAME:
     type: env
     default_value: 'entrypoint'
