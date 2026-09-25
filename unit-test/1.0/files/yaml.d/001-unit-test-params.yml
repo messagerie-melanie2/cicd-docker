@@ -18,7 +18,7 @@ variables:
     help: 'entrypoint name'
     fail_if_empty: True
 
-cmdline: [ 'pytest', '--numprocesses', '${NUM_PROCESS}','/usr/local/entrypoint/script/${ENTRYPOINT_NAME}.py']
+cmdline: [ 'pytest', '-rP', '--numprocesses', '${NUM_PROCESS}','/usr/local/entrypoint/script/${ENTRYPOINT_NAME}.py']
 cmdline_replace_vars: True
 
   
