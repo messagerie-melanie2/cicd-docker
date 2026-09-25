@@ -75,7 +75,7 @@ COPY files/entrypoint /usr/local/entrypoint
 RUN mkdir /usr/local/etc/template.d
 COPY --from=pullunittest /source/cicd-unit-test /usr/local/entrypoint/cicd-unit-test
 
-# Configure image settings
+# Configure image settings 
 ENV TZ Europe/Paris
 
 USER root
