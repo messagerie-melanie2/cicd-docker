@@ -25,7 +25,7 @@ readonly ENTRYPOINT_NAME=${ENTRYPOINT_NAME}
 # Main script instructions
 main()
 {
-    GITLAB_TOKEN=$(cat /run/secrets/unit_test_gitlab_token-v1.0)
+    GITLAB_TOKEN=$(cat /run/secrets/stress_test_gitlab_token-v1.0)
     
     echo https://test-unit:$GITLAB_TOKEN@gitlab-forge.din.developpement-durable.gouv.fr > /root/.git-credentials
     git config --global credential.helper store
