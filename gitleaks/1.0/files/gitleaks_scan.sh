@@ -3,7 +3,7 @@
 #
 # Variables :
 #   GITLEAKS_SCAN_MODE    auto (défaut) | diff | history | dir
-#                         auto    : "diff" sur un push, "history" sinon (schedule, web, trigger)
+#                         auto    : "diff" sur un push, "history" sinon (schedule, web)
 #                         diff    : seulement les commits du push (CI_COMMIT_BEFORE_SHA..CI_COMMIT_SHA)
 #                         history : tout l'historique git
 #                         dir     : seulement les fichiers actuels, sans l'historique
